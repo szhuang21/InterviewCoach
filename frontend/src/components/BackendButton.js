@@ -7,7 +7,7 @@ const BackendButton = () => {
   const [top5NegativeEmotions, setTop5NegativeEmotions] = useState([]);
 
   const handleButtonClick = () => {
-    fetch("http://127.0.0.1:5000/")
+    fetch("http://127.0.0.1:5000")
       .then((res) => res.text())
       .then((data) => setResponse(data))
       .catch((error) => console.error("Error:", error));
