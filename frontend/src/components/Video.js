@@ -1,93 +1,106 @@
-import React, { useRef, useState } from "react";
+import React from "react";
+import Webcam from "react-webcam";
 
-function Video() {
-  const videoRef = useRef(null);
-  const [recordedVideo, setRecordedVideo] = useState(null);
-  const [recording, setRecording] = useState(false);
+const videoConstraints = {
+  aspectRatio: 1.6,
+    facingMode: "user",
+    width: { min: 480 },
+    height: { min: 480 },
+   };
+  
 
-  const handleStartRecording = () => {
-    setRecording(true);
-    videoRef.current.srcObject = null;
-    videoRef.current.src = null;
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      })
-      .catch((error) => {
-        console.error("Error accessing media devices:", error);
-      });
-  };
+const Video = () => {
+  const webcamRef = React.useRef(null);
+  const mediaRecorderRef = React.useRef(null);
+  const [capturing, setCapturing] = React.useState(false);
+  const [recordedChunks, setRecordedChunks] = React.useState([]);
 
-  const handleStopRecording = () => {
-    setRecording(false);
-    const stream = videoRef.current.srcObject;
-    const tracks = stream.getTracks();
-    tracks.forEach((track) => {
-      track.stop();
+  const handleStartCaptureClick = React.useCallback(() => {
+    setCapturing(true);
+    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+      mimeType: "video/webm"
     });
-    const recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
-    setRecordedVideo(URL.createObjectURL(recordedBlob));
-  };
+    mediaRecorderRef.current.addEventListener(
+      "dataavailable",
+      handleDataAvailable
+    );
+    mediaRecorderRef.current.start();
+  }, [webcamRef, setCapturing, mediaRecorderRef]);
 
-  const recordedChunks = [];
-  const handleDataAvailable = (event) => {
-    if (event.data.size > 0) {
-      recordedChunks.push(event.data);
+  const handleDataAvailable = React.useCallback(
+    ({ data }) => {
+      if (data.size > 0) {
+        setRecordedChunks((prev) => prev.concat(data));
+      }
+    },
+    [setRecordedChunks]
+  );
+
+  const handleStopCaptureClick = React.useCallback(() => {
+    mediaRecorderRef.current.stop();
+    setCapturing(false);
+  }, [mediaRecorderRef, webcamRef, setCapturing]);
+
+  const handleDownload = React.useCallback(() => {
+    if (recordedChunks.length) {
+      const blob = new Blob(recordedChunks, {
+        type: "video/webm"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = "react-webcam-stream-capture.mp4";
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setRecordedChunks([]);
     }
-  };
+  }, [recordedChunks]);
+
 
   return (
-    <div>
-      <div className="mb-4">
-        <video
-          ref={videoRef}
-          className="w-full"
-          muted
-          controls
-          playsInline
-        ></video>
-      </div>
-      {recordedVideo && (
-        <div>
-          <p>Recorded video:</p>
-          <video
-            src={recordedVideo}
-            className="w-1/2"
-            controls
-            loop
-            playsInline
-          ></video>
+    <>
+      <div className="relative">
+        <Webcam
+          width={1000}
+          height={480}
+          videoConstraints={videoConstraints}
+          audio={true}
+          muted={true}
+          ref={webcamRef}
+          mirrored={true}
+          className="bg-blue-400 mb-16"
+        />
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+          {capturing ? (
+            <button
+              onClick={handleStopCaptureClick}
+              className="bg-blue-400 mr-2 px-4 py-2 rounded-md text-white"
+            >
+              Stop Capture
+            </button>
+          ) : (
+            <button
+              onClick={handleStartCaptureClick}
+              className="bg-blue-400 mr-2 px-4 py-2 rounded-md text-white"
+            >
+              Start Capture
+            </button>
+          )}
+          {recordedChunks.length > 0 && (
+            <button
+              onClick={handleDownload}
+              className="bg-blue-400 px-4 py-2 rounded-md text-white"
+            >
+              Download
+            </button>
+          )}
         </div>
-      )}
-      {!recording ? (
-        <button
-          onClick={handleStartRecording}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Start Recording
-        </button>
-      ) : (
-        <button
-          onClick={handleStopRecording}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Stop Recording
-        </button>
-      )}
-    </div>
+      </div>
+    </>
   );
-}
+  
+};
 
 export default Video;
-
-// function Video() {
-//   return (
-//     <div>
-//       <div>Video</div>
-//     </div>
-//   );
-// }
-
-// export default Video;
