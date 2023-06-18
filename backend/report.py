@@ -10,6 +10,7 @@ import openai
 import pandas as pd
 from report import *
 import plotly.express as px
+import numpy as np
 
 
 
@@ -171,7 +172,8 @@ def getTranscript(video):
 
     return " ".join(transcript)
 
-# print(getTranscript("test3.mp4"))
+
+print(getTranscript("vid.mp4"))
 
 def generate_better_response(question, response, age, role):
     openai.api_key = "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"
@@ -188,21 +190,30 @@ def generate_better_response(question, response, age, role):
     return better_response
 
 def generate_graph(video):
-    top_positive_emotions, top_negative_emotions = videoToEmotions(video)
+    videos_df = getDataFrame(video, True)
+    videos_df["Type"] = ["video"] * 10
+    words_df = getDataFrame(video, False)
+    words_df["Type"] = ["word"] * 10
+    joined = videos_df._append(words_df, ignore_index=True)
+    print(joined)
+    fig = px.bar(joined, x="Emotion", y="Value",
+                color="Type", hover_data = ["Emotion", "Value", "Connotation"],
+                height=600, width=800, barmode='group')
+    fig.show()
+    return fig
+
+def getDataFrame(video, isVideo):
+    if isVideo:
+        top_positive_emotions, top_negative_emotions = videoToEmotions(video)
+    else:
+        top_positive_emotions, top_negative_emotions, transcript = wordsToEmotion(video)
     positives_emo = [i[0] for i in top_positive_emotions]
     positives_values = [j[1] for j in top_positive_emotions]
     negatives_values = [b[1] for b in top_negative_emotions]
-    conns = ["positive"] * 5 + ["negative"] * 5
     negatives_emo = [a[0] for a in top_negative_emotions]
+
+    conns = ["positive"] * 5 + ["negative"] * 5
     emotions = positives_emo + negatives_emo
     values = positives_values + negatives_values
-    df = pd.DataFrame({"Emotions": emotions, "Values": values, "Connotation": conns})
-
-    print(df)
-
-    fig = px.bar(df, x="Emotions", y="Values",
-                color="Connotation", 
-                height=600, width=800)
-    fig.update_layout(bargap=0.2)
-    fig.show()
-    return fig
+    df = pd.DataFrame({"Emotion": emotions, "Value": values, "Connotation": conns})
+    return df
