@@ -1,5 +1,7 @@
 import React from "react";
 import Webcam from "react-webcam";
+import { useHistory } from 'react-router-dom';
+
 
 const videoConstraints = {
   aspectRatio: 1.6,
@@ -10,6 +12,7 @@ const videoConstraints = {
   
 
 const Video = () => {
+  const history = useHistory();
   const webcamRef = React.useRef(null);
   const mediaRecorderRef = React.useRef(null);
   const [capturing, setCapturing] = React.useState(false);
@@ -42,22 +45,25 @@ const Video = () => {
     // handleDownload();
   }, [mediaRecorderRef, webcamRef, setCapturing]);
 
-  const handleDownload = React.useCallback(() => {
-    if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, {
-        type: "video/webm"
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = url;
-      a.download = "react-webcam-stream-capture.mov";
-      a.click();
-      window.URL.revokeObjectURL(url);
-      setRecordedChunks([]);
-    }
-  }, [recordedChunks]);
+  const handleDownload = () => {
+    history.push('/Report');
+  }
+  // = React.useCallback(() => {
+  //   if (recordedChunks.length) {
+  //     const blob = new Blob(recordedChunks, {
+  //       type: "video/webm"
+  //     });
+  //     const url = URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     document.body.appendChild(a);
+  //     a.style = "display: none";
+  //     a.href = url;
+  //     a.download = "react-webcam-stream-capture.mov";
+  //     a.click();
+  //     window.URL.revokeObjectURL(url);
+  //     setRecordedChunks([]);
+  //   }
+  // }, [recordedChunks]);
 
 
   return (

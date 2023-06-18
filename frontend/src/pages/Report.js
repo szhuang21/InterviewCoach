@@ -14,7 +14,7 @@ const Report = () => {
     console.log("button was clicked");
     try {
       const formData =
-        "/Users/prachideo/Desktop/AI_Hackathon/InterviewCoach/backend/test_videos/test_vids.zip";
+        "WIN_20230618_13_22_38_Pro.mp4";
 
       const response = await fetch("http://127.0.0.1:5000/getFullReport", {
         method: "POST",
@@ -63,6 +63,26 @@ const Report = () => {
         </thead>
         <tbody>
           {top5VisualPositiveEmotions?.map((pair, index) => (
+            <tr key={index}>
+              <td className="border px-4 py-2">{pair[0]}</td>
+              <td className="border px-4 py-2">{pair[1]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <br></br>
+      <div className="text-lg text-gray-600 font-montserrat">
+        Your Top 5 Negative Emotions
+      </div>
+      <table className="w-1/2">
+        <thead>
+          <tr>
+            <th className="text-left">Emotion</th>
+            <th className="text-left">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {top5VisualNegativeEmotions?.map((pair, index) => (
             <tr key={index}>
               <td className="border px-4 py-2">{pair[0]}</td>
               <td className="border px-4 py-2">{pair[1]}</td>

@@ -14,7 +14,7 @@ import numpy as np
 
 
 
-def videoToEmotions(video):
+def videoToEmotions(video = "WIN_20230618_13_22_38_Pro.mp4"):
     client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
     files = [video]
     config = FaceConfig()

@@ -2,11 +2,13 @@ import Video from "../components/Video";
 import React, { useState } from 'react';
 import BackendButton from "../components/BackendButton";
 import Recorder from "../components/Recorder";
+import { useHistory } from 'react-router-dom';
 
 
 function HomePage() {
 
   const MyForm = () => {
+    const history = useHistory();
     const [formData, setFormData] = useState({
       numquestions: 0,
       age: 0,
@@ -46,6 +48,7 @@ function HomePage() {
       event.preventDefault();
       // Handle form submission here
       console.log(formData);
+      history.push('/Video');
     };
   
     return (
