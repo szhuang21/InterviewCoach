@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Plotly from "plotly.js-basic-dist";
 
 const Report = () => {
   const [top5VisualPositiveEmotions, setTop5VisualPositiveEmotions] = useState(
@@ -10,11 +11,15 @@ const Report = () => {
   const [graph, setGraph] = useState([]);
   const [imageSrc, setImageSrc] = useState("");
 
+  const renderGraph = (fig) => {
+    console.log('inside of renderGraph');
+    Plotly.newPlot("graph-container", fig.data, fig.layout);
+  };
   const handleReportSubmit = async () => {
     console.log("button was clicked");
     try {
       const formData =
-        "/Users/prachideo/Desktop/AI_Hackathon/InterviewCoach/backend/test_videos/test_vids.zip";
+        "/Users/sophiazhuang/Desktop/InterviewCoach/InterviewCoach/backend/test.zip";
 
       const response = await fetch("http://127.0.0.1:5000/getFullReport", {
         method: "POST",
@@ -29,6 +34,7 @@ const Report = () => {
         setTop5VisualNegativeEmotions(report["top_visual_negative_emotions"]);
         setGraph(report["graph"]);
         setImageSrc(report["image_src"]);
+        renderGraph(report["graph"]);
       } else {
         console.error("Error:", response.status);
       }
@@ -38,6 +44,7 @@ const Report = () => {
       console.log("top5PositiveEmotions: ", top5VisualPositiveEmotions);
     }
   };
+
 
   return (
     <div className="pl-8 pt-8">
