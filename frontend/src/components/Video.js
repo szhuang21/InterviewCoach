@@ -94,7 +94,7 @@ const Video = () => {
               onClick={handleDownload}
               className="bg-blue-400 px-4 py-2 rounded-md text-white"
             >
-              Download
+              Submit
             </button>
           )}
         </div>

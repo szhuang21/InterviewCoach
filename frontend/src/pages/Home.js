@@ -29,7 +29,7 @@ function HomePage() {
     };
 
     const style_text = {
-      color: 'white',
+      color: 'black',
       width: 600,
       height: 50
     };

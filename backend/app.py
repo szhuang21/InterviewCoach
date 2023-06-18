@@ -37,7 +37,7 @@ def get_full_report():
     data = request.get_data()
     zip_url = data.decode('utf-8')
     print("line 38")
-    top_visual_positive_emotions,  top_visual_negative_emotions = videoToEmotions(zip_url)
+    top_visual_positive_emotions,  top_visual_negative_emotions = videoToEmotions("WIN_20230618_13_22_38_Pro.mp4")
     print("line 41")
     graph = generate_graph(zip_url)
     print("line 43")
