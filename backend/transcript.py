@@ -6,7 +6,7 @@ import constants
 
 client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
 # files = ["/Users/prachideo/Desktop/AI_Hackathon/InterviewCoach/backend/test_videos/talk_video.mov"]
-files = ["/Users/kelsi/OneDrive/Pictures/Camera Roll/WIN_20230617_20_30_35_Pro.mp4"]
+files = ["/Users/kelsi/OneDrive/Pictures/Camera Roll/WIN_20230617_20_30_35_Pro.zip"]
 urls = None
 config = LanguageConfig()
 job = client.submit_job(None, [config], files = files)
