@@ -1,21 +1,30 @@
-from flask import Flask
+from flask import Flask, request
 # from report import generate_report
 from report import generate_better_response
+from report import videoToEmotions
 
+from flask_cors import CORS
+
+# Starts Flask connection
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():
     return 'Hello, World!'
 
-# @app.route('/getReport', methods=['POST'])
-# def get_report():
-#     video = request.files['video']
-#     # Assuming generate_report function accepts a file path as a parameter
-#     video.save('temp_video.mp4')  # Save the uploaded video as a temporary file
-#     report = generate_report('temp_video.mp4')
-#     # Process the report or return it as a response
-#     return report
+@app.route('/getReport', methods=['POST'])
+def get_report():
+    if not request:
+        return 'no request found', 400
+    
+    data = request.get_data()
+    zip_url = data.decode('utf-8')
+    top_positive_emotions,  top_negative_emotions = videoToEmotions(zip_url)
+    return {'response': '200',
+        'top_positive_emotions': top_positive_emotions,
+        'top_negative_emotions': top_negative_emotions,
+    }
 
 @app.route('/generateBetterResponse')
 def get_better_response():
