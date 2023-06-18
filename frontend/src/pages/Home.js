@@ -1,11 +1,14 @@
 import Video from "../components/Video";
+// import BackendButton from "../components/BackendButton";
+import Recorder from "../components/Recorder";
+// import RecordView from "../components/RecordView";
 
 function HomePage() {
   return (
     <div>
-      <div>
-        <Video />
-      </div>
+      <div>Hello</div>
+      <Video/>
+      {/* <Recorder /> */}
     </div>
   );
 }
