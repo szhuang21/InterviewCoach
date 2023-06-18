@@ -1,7 +1,7 @@
 from flask import Flask, request
 # from report import generate_report
 from report import generate_better_response
-from report import videoToEmotions, getTranscript, generate_better_response, generate_graph
+from report import videoToEmotions, wordsToEmotion, getTranscript, generate_better_response, generate_graph
 import json
 from flask_cors import CORS
 
@@ -43,24 +43,24 @@ def get_full_report():
     print("line 43")
     graph_json = json.loads(graph.to_json())
     print("line 43")
-    return {'response': '200',
-        'top_visual_positive_emotions': top_visual_positive_emotions,
-        'top_visual_negative_emotions': top_visual_negative_emotions,
-        'graph': graph_json, 
-        
-    }
-    # top_verbal_positive_emotions,  top_verbal_negative_emotions = wordToEmotions(zip_url)
-    # transcription = getTranscript(zip_url)
-    # suggestions = generate_better_response(zip_url)
-
     # return {'response': '200',
     #     'top_visual_positive_emotions': top_visual_positive_emotions,
     #     'top_visual_negative_emotions': top_visual_negative_emotions,
-    #     'top_verbal_positive_emotions': top_verbal_positive_emotions,
-    #     'top_verbal_negative_emotions': top_verbal_negative_emotions,
-    #     'transcription': transcription, 
-    #     'suggestions': suggestions 
+    #     'graph': graph_json, 
+        
     # }
+    top_verbal_positive_emotions,  top_verbal_negative_emotions = wordsToEmotion("WIN_20230618_13_22_38_Pro.mp4")
+    transcription = getTranscript("WIN_20230618_13_22_38_Pro.mp4")
+    suggestions = generate_better_response("What is your biggest weakness", "I don't know", 20, "Computer Science")
+
+    return {'response': '200',
+        'top_visual_positive_emotions': top_visual_positive_emotions,
+        'top_visual_negative_emotions': top_visual_negative_emotions,
+        'top_verbal_positive_emotions': top_verbal_positive_emotions,
+        'top_verbal_negative_emotions': top_verbal_negative_emotions,
+        'transcription': transcription, 
+        'suggestions': suggestions 
+    }
 
 @app.route('/generateBetterResponse')
 def get_better_response():

@@ -141,7 +141,7 @@ def wordsToEmotion(video):
     # Get the top 5 negative emotions
     top_negative_emotions = sorted_negative_emotions[:5]
 
-    return top_positive_emotions, top_negative_emotions, transcript
+    return top_positive_emotions, top_negative_emotions
 
 
 def getTranscript(video):
@@ -206,7 +206,7 @@ def getDataFrame(video, isVideo):
     if isVideo:
         top_positive_emotions, top_negative_emotions = videoToEmotions(video)
     else:
-        top_positive_emotions, top_negative_emotions, transcript = wordsToEmotion(video)
+        top_positive_emotions, top_negative_emotions = wordsToEmotion(video)
     positives_emo = [i[0] for i in top_positive_emotions]
     positives_values = [j[1] for j in top_positive_emotions]
     negatives_values = [b[1] for b in top_negative_emotions]
