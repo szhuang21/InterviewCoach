@@ -52,6 +52,9 @@ function HomePage() {
     };
   
     return (
+      <div>
+        <div className="text-lg ml-4">AI Interview Coach</div>
+      
       <form onSubmit={handleSubmit}>
         <div style={styles}>
           <label htmlFor="numquestions">How many questions would you like to try?  </label>
@@ -85,6 +88,7 @@ function HomePage() {
         </div>
         <button style= {style_button} onClick={handleSubmit}>Submit</button>
       </form>
+      </div>
     );
   };
 
