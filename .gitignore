@@ -2,3 +2,6 @@
 .DS_Store?
 *.json
 *.zip
+*.mov
+*.mp4
+*.jpg
