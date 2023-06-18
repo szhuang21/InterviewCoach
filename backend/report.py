@@ -21,13 +21,19 @@ print(job)
 print("Running...")
 
 details = job.await_complete()
-print("job completed with status:", job.get_status())
 
+# Retrieve predictions from job
 full_predictions = job.get_predictions()
-print("full_predictions: ")
+print("full_predictions: ", full_predictions)
+job.download_predictions("predictions.json")
+
+# # Extract relevant predictions
+# predictions = full_predictions[0]['results']['predictions'][0]['models']['prosody']['grouped_predictions'][0]['predictions'][0]
+# print("predictions: ", predictions)
 
 
 # transcription = predictions['text']
+# print("transcription: ", transcription)
 
 # job.download_predictions("predictions.json")
 # # print("details: ", job.get_details())
