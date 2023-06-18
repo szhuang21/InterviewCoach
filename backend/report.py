@@ -12,8 +12,8 @@ def videoToEmotions(video):
     config = FaceConfig()
     job = client.submit_job(None, [config], files = files)
 
-    print(job)
-    print("Running...")
+    # print(job)
+    # print("Running...")
 
     details = job.await_complete()
     job.download_predictions("predictions.json")
