@@ -173,7 +173,7 @@ def getTranscript(video):
     return " ".join(transcript)
 
 
-#print(getTranscript("vid.mp4"))
+print(getTranscript("vid.mp4"))
 
 def generate_better_response(question, response, age, role):
     openai.api_key = "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"
