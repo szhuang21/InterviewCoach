@@ -7,16 +7,14 @@ const Report = () => {
   const [top5VisualNegativeEmotions, setTop5VisualNegativeEmotions] = useState(
     []
   );
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {}, []);
+  const [graph, setGraph] = useState([]);
+  const [imageSrc, setImageSrc] = useState("");
 
   const handleReportSubmit = async () => {
     console.log("button was clicked");
-    setIsLoading(true); // Set loading state to true before fetching data
     try {
       const formData =
-        "/Users/sophiazhuang/Desktop/InterviewCoach/InterviewCoach/backend/test.zip";
+        "/Users/prachideo/Desktop/AI_Hackathon/InterviewCoach/backend/test_videos/test_vids.zip";
 
       const response = await fetch("http://127.0.0.1:5000/getFullReport", {
         method: "POST",
@@ -29,6 +27,8 @@ const Report = () => {
         console.log("report: ", report);
         setTop5VisualPositiveEmotions(report["top_visual_positive_emotions"]);
         setTop5VisualNegativeEmotions(report["top_visual_negative_emotions"]);
+        setGraph(report["graph"]);
+        setImageSrc(report["image_src"]);
       } else {
         console.error("Error:", response.status);
       }
@@ -36,13 +36,15 @@ const Report = () => {
       console.error("Error:", error);
     } finally {
       console.log("top5PositiveEmotions: ", top5VisualPositiveEmotions);
-      setIsLoading(false); // Set loading state to false after fetching data
     }
   };
 
   return (
-    <div>
-      <button onClick={handleReportSubmit} className="text-center">
+    <div className="pl-8 pt-8">
+      <button
+        onClick={handleReportSubmit}
+        className="flex justify-center items-center mb-8"
+      >
         Get Report
       </button>
       <div className="text-xl text-black font-bold font-montserrat mb-1">
@@ -55,8 +57,8 @@ const Report = () => {
       <table className="w-1/2">
         <thead>
           <tr>
-            <th className="text-left">Key</th>
-            <th className="text-left">Value</th>
+            <th className="text-left">Emotion</th>
+            <th className="text-left">Score</th>
           </tr>
         </thead>
         <tbody>
@@ -68,12 +70,12 @@ const Report = () => {
           ))}
         </tbody>
       </table>
-{/* 
-      <ul className="text-lg">
-        {top5VisualPositiveEmotions?.map((emotion, index) => (
-          <li key={index}>{emotion[0]}</li>
-        ))}
-      </ul> */}
+      {imageSrc && (
+        <div>
+          <h2>Image:</h2>
+          <img src={imageSrc} alt="Report Image" />
+        </div>
+      )}
     </div>
   );
 };
