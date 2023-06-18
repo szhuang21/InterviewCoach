@@ -5,6 +5,8 @@ from hume.models.config import LanguageConfig
 import json
 import constants
 
+import os
+import openai
 
 def videoToEmotions(video):
     client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
@@ -157,3 +159,17 @@ def wordsToEmotion(video):
 
 
     # print(transcript)
+
+def generate_better_response(question, response, age, role):
+    openai.api_key = "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"
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": f"Can you make this message sound more natural and human-like (speak like you would to an interviewer, not too many big words), clear, concise, and confident to pass an interivew: {response}."},
+            {"role": "system", "content": f"You are a {age} year old interviewing for a position in {role} answering the interview question: {question}"}
+        ]
+    )
+
+    better_response = completion.choices[0].message.content
+    print(better_response)
+    return better_response
