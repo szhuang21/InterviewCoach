@@ -5,48 +5,113 @@ import json
 
 import constants
 
-client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
-files = ["Screenshot 2023-06-17 170731.png"]
-urls = None
-config = FaceConfig()
-job = client.submit_job(None, [config], files = files)
+# client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
+# files = ["WIN_20230617_18_59_04_Pro.zip"]
+# urls = None
+# config = FaceConfig()
+# job = client.submit_job(None, [config], files = files)
 
-print(job)
-print("Running...")
+# print(job)
+# print("Running...")
 
-details = job.await_complete()
-job.download_predictions("predictions.json")
-print("Predictions downloaded to predictions.json")
+# details = job.await_complete()
+# job.download_predictions("predictions.json")
+# print("Predictions downloaded to predictions.json")
 
 
-with open('predictions.json', 'r') as file:
+# with open('predictions.json', 'r') as file:
+#     data = json.load(file)
+
+# # Get the predictions
+# predictions = data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions']
+# emotions = predictions[0]['emotions']
+
+# # Sort the emotions based on their scores in descending order
+# sorted_emotions = sorted(emotions, key=lambda x: x['score'], reverse=True)
+
+
+# # Get the top 5 positive emotions
+# top_5_positive_emotions = [emotion['name'] for emotion in sorted_emotions if emotion['name'] in constants.positive_emotions_other][:5]
+# top_5_positive_scores = [emotion['score'] for emotion in sorted_emotions if emotion['name'] in constants.positive_emotions_other][:5]
+
+
+# # Get the top 5 negative emotions
+# top_5_negative_emotions = [emotion['name'] for emotion in sorted_emotions if emotion['name'] in constants.negative_emotions_other][:5]
+# top_5_negative_scores = [emotion['score'] for emotion in sorted_emotions if emotion['name'] in constants.negative_emotions_other][:5]
+
+
+# # Print the top 5 positive emotions
+# print("Top 5 Positive Emotions:")
+# for i in range(5):
+#     print(top_5_positive_emotions[i], top_5_positive_scores[i])
+
+# print()
+# # Print the top 5 negative emotions
+# print("Top 5 Negative Emotions:")
+# for i in range(5):
+#     print(top_5_negative_emotions[i], top_5_negative_scores[i])
+
+
+
+
+with open('predictions.json') as file:
     data = json.load(file)
 
-# Get the predictions
-predictions = data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions']
-emotions = predictions[0]['emotions']
+# Initialize dictionaries to store positive and negative emotions
+positive_emotions = {}
+negative_emotions = {}
 
-# Sort the emotions based on their scores in descending order
-sorted_emotions = sorted(emotions, key=lambda x: x['score'], reverse=True)
+video = data[0]["results"]["predictions"]
+# Iterate over each frame in the video data
+for vid in video:
+    predictions = vid['models']['face']['grouped_predictions'][0]['predictions']
+    
+    # Iterate over each prediction in the frame
+    for prediction in predictions:
+        emotions = prediction['emotions']
 
+        
+        # Iterate over each emotion in the prediction
+        for emotion in emotions:
+            emotion_name = emotion['name']
+            emotion_score = emotion['score']
+            
+            # Check if the emotion is positive or negative
+            if emotion_name in constants.positive_emotions_other:
+                positive_emotions[emotion_name] = positive_emotions.get(emotion_name, []) + [emotion_score]
+            elif emotion_name in constants.negative_emotions_other:
+                negative_emotions[emotion_name] = negative_emotions.get(emotion_name, []) + [emotion_score]
+
+
+# Calculate the average scores for each positive emotion
+average_positive_emotions = {}
+for emotion, scores in positive_emotions.items():
+    average_score = sum(scores) / len(scores)
+    average_positive_emotions[emotion] = average_score
+
+
+# Calculate the average scores for each negative emotion
+average_negative_emotions = {}
+for emotion, scores in negative_emotions.items():
+    average_score = sum(scores) / len(scores)
+    average_negative_emotions[emotion] = average_score
+
+# Sort the average positive emotions by score (descending order)
+sorted_positive_emotions = sorted(average_positive_emotions.items(), key=lambda x: x[1], reverse=True)
+
+# Sort the average negative emotions by score (descending order)
+sorted_negative_emotions = sorted(average_negative_emotions.items(), key=lambda x: x[1], reverse=True)
 
 # Get the top 5 positive emotions
-top_5_positive_emotions = [emotion['name'] for emotion in sorted_emotions if emotion['name'] in constants.positive_emotions_other][:5]
-top_5_positive_scores = [emotion['score'] for emotion in sorted_emotions if emotion['name'] in constants.positive_emotions_other][:5]
-
+top_positive_emotions = sorted_positive_emotions[:5]
 
 # Get the top 5 negative emotions
-top_5_negative_emotions = [emotion['name'] for emotion in sorted_emotions if emotion['name'] in constants.negative_emotions_other][:5]
-top_5_negative_scores = [emotion['score'] for emotion in sorted_emotions if emotion['name'] in constants.negative_emotions_other][:5]
+top_negative_emotions = sorted_negative_emotions[:5]
 
-
-# Print the top 5 positive emotions
 print("Top 5 Positive Emotions:")
-for i in range(5):
-    print(top_5_positive_emotions[i], top_5_positive_scores[i])
+for emotion, score in top_positive_emotions:
+    print(f"{emotion}: {score}")
 
-print()
-# Print the top 5 negative emotions
-print("Top 5 Negative Emotions:")
-for i in range(5):
-    print(top_5_negative_emotions[i], top_5_negative_scores[i])
+print("\nTop 5 Negative Emotions:")
+for emotion, score in top_negative_emotions:
+    print(f"{emotion}: {score}")

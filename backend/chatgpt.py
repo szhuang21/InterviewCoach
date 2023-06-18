@@ -1,13 +1,13 @@
 import os
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 
 def generate_better_response(question, response, age, role):
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "user", "content": f"Can you make this message sound more natural, clear, concise, and confident to pass an interivew: {response}."},
-            {"role": "system", "content": f"You are a {age} year old answering the interview question: {question}"}
+            {"role": "user", "content": f"Can you make this message sound more natural and human-like (speak like you would to an interviewer, not too many big words), clear, concise, and confident to pass an interivew: {response}."},
+            {"role": "system", "content": f"You are a {age} year old interviewing for a position in {role} answering the interview question: {question}"}
         ]
     )
 
@@ -16,4 +16,4 @@ def generate_better_response(question, response, age, role):
     return better_response
 
 # generate_better_response("How do you think you are at skateboarding", "I think I am okay at skateboarding.", 18, "software engineering")
-generate_better_response("What is your greatest weakness", "Unorganized", 18, "software engineering")
+generate_better_response("What is your biggest weakness?", "i am stupid", 20, "software engineer")
