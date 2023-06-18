@@ -22,10 +22,12 @@
 
 import "./App.css";
 import Video from "./components/Video";
+import MyForm from "./pages/Home";
 
 function App() {
   return (
     <div className="App">
+      <MyForm/>
       <Video/>
     </div>
   );
