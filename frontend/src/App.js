@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
-
+import Report from "./pages/Report";
 /**
  * provides routing to different pages
  */
@@ -11,6 +11,9 @@ function App() {
       <Switch>
         <Route exact path="/">
           <Home />
+        </Route>
+        <Route exact path="/Report">
+          <Report />
         </Route>
       </Switch>
     </Router>
