@@ -1,6 +1,6 @@
 import os
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 
 def generate_better_response(question, response, age, role):
     completion = openai.ChatCompletion.create(
@@ -15,19 +15,5 @@ def generate_better_response(question, response, age, role):
     print(better_response)
     return better_response
 
-# # generate_better_response("How do you think you are at skateboarding", "I think I am okay at skateboarding.", 18, "software engineering")
-# generate_better_response("What is your biggest weakness?", "i am stupid", 20, "software engineer")
-
-def generate_question(age, role):
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": f"Can you provide the best behavioral interview question for a {age} year old interviewing for a position in {role}."},
-        ]
-    )
-
-    question = completion.choices[0].message.content
-    print(question)
-    return question
-
-generate_question(19, "computer science")
+# generate_better_response("How do you think you are at skateboarding", "I think I am okay at skateboarding.", 18, "software engineering")
+generate_better_response("What is your biggest weakness?", "i am stupid", 20, "software engineer")

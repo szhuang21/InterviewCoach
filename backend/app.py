@@ -1,11 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 # from report import generate_report
-from chatgpt import generate_question
 from report import generate_better_response
 from report import videoToEmotions, wordsToEmotion, getTranscript, generate_better_response, generate_graph
 import json
 from flask_cors import CORS
-import flask
 
 # Starts Flask connection
 app = Flask(__name__)
@@ -14,43 +12,6 @@ CORS(app)
 @app.route('/')
 def index():
     return 'Hello, World!'
-
-
-# @app.route('/getInterviewQuestion', methods=['POST'])
-# def get_interview_question():
-#     print("line 20")
-#     print("request: ", request)
-#     if not request:
-#         return 'no request found', 400
-    
-#     data = request.get_data()
-#     response = flask.jsonify({'some': 'data'})
-#     response.headers.add('Access-Control-Allow-Origin', '*')
-
-#     return response 
-#     # age = data["age"]
-#     # role = data["role"]
-#     # question = generate_question(age, role)
-#     # return {'response': '200',
-#     #     'question': question
-        
-#     # }
-
-@app.route('/getInterviewQuestion', methods=['POST'])
-def get_interview_question():
-    print("line 41")
-    data = request.get_json()
-    print("line 43")
-    age = data.get('age')
-    print("line 45")
-    role = data.get('role')
-
-    if not age or not role:
-        return 'Invalid request body', 400
-
-    question = generate_question(age, role)
-
-    return question
 
 # /getReport is a test endpoint
 @app.route('/getReport', methods=['POST'])
