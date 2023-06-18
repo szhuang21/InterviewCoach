@@ -165,6 +165,7 @@ def getTranscript(video):
     config = LanguageConfig()
     job = client.submit_job(None, [config], files = files)
 
+    details = job.await_complete()
     job.download_predictions("test_lang_predictions.json")
     print("Predictions downloaded to test_lang_predictions.json")
 
@@ -172,6 +173,8 @@ def getTranscript(video):
         data = json.load(file)
 
     transcript = []
+
+
     video = data[0]["results"]["predictions"]
     # Iterate over each frame in the video data
     for vid in video:
@@ -180,10 +183,8 @@ def getTranscript(video):
         for prediction in predictions:
             transcript.append(prediction['text'])
 
-    print(" ".join(transcript))
     return " ".join(transcript)
 
-getTranscript("INSERT_ZIP_FILE_HERE")
 
 def generate_better_response(question, response, age, role):
     openai.api_key = "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"
