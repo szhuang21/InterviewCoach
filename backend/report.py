@@ -217,3 +217,4 @@ def getDataFrame(video, isVideo):
     values = positives_values + negatives_values
     df = pd.DataFrame({"Emotion": emotions, "Value": values, "Connotation": conns})
     return df
+

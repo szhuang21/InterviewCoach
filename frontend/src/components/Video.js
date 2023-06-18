@@ -39,6 +39,7 @@ const Video = () => {
   const handleStopCaptureClick = React.useCallback(() => {
     mediaRecorderRef.current.stop();
     setCapturing(false);
+    // handleDownload();
   }, [mediaRecorderRef, webcamRef, setCapturing]);
 
   const handleDownload = React.useCallback(() => {
@@ -51,7 +52,7 @@ const Video = () => {
       document.body.appendChild(a);
       a.style = "display: none";
       a.href = url;
-      a.download = "react-webcam-stream-capture.mp4";
+      a.download = "react-webcam-stream-capture.mov";
       a.click();
       window.URL.revokeObjectURL(url);
       setRecordedChunks([]);

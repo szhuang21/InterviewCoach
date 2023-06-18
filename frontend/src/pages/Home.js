@@ -1,5 +1,8 @@
 import Video from "../components/Video";
 import React, { useState } from 'react';
+import BackendButton from "../components/BackendButton";
+import Recorder from "../components/Recorder";
+
 
 function HomePage() {
 
@@ -91,12 +94,7 @@ function HomePage() {
 
   return (
     <div>
-      <div>
-        <h1 style={style_h1}><b>Welcome to InterviewCoach! Let's get started!</b></h1>
-      </div>
-      <div>
-        <MyForm /> 
-      </div>
+      <MyForm /> 
     </div>
   );
 }
