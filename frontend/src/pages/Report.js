@@ -14,7 +14,7 @@ const Report = () => {
     console.log("button was clicked");
     try {
       const formData =
-        "/Users/sophiazhuang/Desktop/InterviewCoach/InterviewCoach/backend/test.zip";
+        "/Users/prachideo/Desktop/AI_Hackathon/InterviewCoach/backend/test_videos/test_vids.zip";
 
       const response = await fetch("http://127.0.0.1:5000/getFullReport", {
         method: "POST",
