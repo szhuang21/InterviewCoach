@@ -88,7 +88,6 @@ def videoToEmotions(video):
     #     print(f"{emotion}: {score}")
 
 
-
 def wordsToEmotion(video):
     client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
     # files = ["/Users/prachideo/Desktop/AI_Hackathon/InterviewCoach/backend/test_videos/talk_video.mov"]
@@ -160,6 +159,32 @@ def wordsToEmotion(video):
 
     # print(transcript)
 
+def getTranscript(video):
+    client = HumeBatchClient("HYNdEFrlFnYpEUJAcUfaKYf8Or8qMyIo3IFzuAQBlcFGiE24")
+    files = [video]
+    config = LanguageConfig()
+    job = client.submit_job(None, [config], files = files)
+
+    job.download_predictions("test_lang_predictions.json")
+    print("Predictions downloaded to test_lang_predictions.json")
+
+    with open('test_lang_predictions.json') as file:
+        data = json.load(file)
+
+    transcript = []
+    video = data[0]["results"]["predictions"]
+    # Iterate over each frame in the video data
+    for vid in video:
+        predictions = vid['models']['language']['grouped_predictions'][0]['predictions']
+
+        for prediction in predictions:
+            transcript.append(prediction['text'])
+
+    print(" ".join(transcript))
+    return " ".join(transcript)
+
+getTranscript("INSERT_ZIP_FILE_HERE")
+
 def generate_better_response(question, response, age, role):
     openai.api_key = "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"
     completion = openai.ChatCompletion.create(
@@ -173,3 +198,5 @@ def generate_better_response(question, response, age, role):
     better_response = completion.choices[0].message.content
     print(better_response)
     return better_response
+
+
